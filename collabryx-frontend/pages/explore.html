@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Explore Projects · Collabryx</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/script.js"></script>
+</head>
+<body>
+  <div id="sidebar-container"></div>
+
+  <div class="container">
+    <main class="main">
+      <h1>Explore Projects</h1>
+      <p>Discover and collaborate on exciting ideas from your community.</p>
+
+      <div class="explore-cards" id="ideasContainer" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:20px; margin-top:8px;">
+        <div class="loading-message">Loading ideas...</div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+window.onload = function () {
+  loadIdeas();
+};
+
+async function loadIdeas() {
+  const container = document.getElementById("ideasContainer");
+
+  try {
+    const res = await fetch("http://localhost:5000/api/ideas");
+    const ideas = await res.json();
+
+    container.innerHTML = "";
+
+    if (ideas.length === 0) {
+      container.innerHTML = "<p class='empty-message'>No ideas available</p>";
+      return;
+    }
+
+    ideas.forEach(idea => {
+      const card = document.createElement("div");
+      card.className = "idea-card";
+
+      const skillsHTML = (idea.requiredSkills || [])
+        .map(skill => `<span class="skill-badge">${skill}</span>`)
+        .join("");
+
+      card.innerHTML = `
+        <div class="idea-card-header">
+          <h3 class="idea-card-title">${idea.title}</h3>
+          <p class="idea-card-creator">Created by ${idea.createdBy?.name || "User"}</p>
+        </div>
+
+        <p class="idea-card-description">${idea.description}</p>
+
+        <div>
+          <div class="idea-skills-label">Skills Required</div>
+          <div class="idea-skills">${skillsHTML}</div>
+        </div>
+
+        <div class="idea-card-buttons">
+          <button class="apply-btn" onclick="applyProject('${idea._id}')">
+            🚀 Apply
+          </button>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+    console.log("Error:", error);
+    container.innerHTML = "<p class='empty-message'>Error loading ideas</p>";
+  }
+}
+
+async function applyProject(ideaId) {
+  try {
+    const res = await fetch(`http://localhost:5000/api/request/apply/${ideaId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+
+    const data = await res.json();
+    alert("Applied successfully 🚀");
+
+  } catch (error) {
+    console.log("Error:", error);
+  }
+}
+  </script>
+
+  <script src="../js/sidebar-loader.js"></script>
+</body>
+</html>

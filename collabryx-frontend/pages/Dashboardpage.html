@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard · Collabryx</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      border-radius: 14px;
+      padding: 22px 20px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.05);
+      border-radius: inherit;
+    }
+
+    .stat-card.blue  { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 8px 24px rgba(59,130,246,0.3); }
+    .stat-card.green { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 8px 24px rgba(16,185,129,0.3); }
+    .stat-card.amber { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 8px 24px rgba(245,158,11,0.3); }
+
+    .stat-card h3 { font-size: 13px; font-weight: 600; opacity: 0.85; margin-bottom: 8px; letter-spacing: 0.3px; }
+    .stat-card h2 { font-size: 36px; font-weight: 900; letter-spacing: -1px; }
+
+    .section-heading {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      margin: 28px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-container"></div>
+
+<div class="container">
+  <div class="main">
+    <h1>Welcome to Dashboard</h1>
+    <p>Here's what's happening on Collabryx today.</p>
+
+    <!-- User Profile -->
+    <div class="user-profile">
+      <div class="user-info">
+        <div class="user-details">
+          <h3 id="userName">Loading...</h3>
+          <p><strong>Email:</strong> <span id="userEmail">-</span></p>
+          <p><strong>Enrollment:</strong> <span id="userEnrollment">-</span></p>
+        </div>
+        <span class="role-badge" id="userRole">-</span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card blue">
+        <h3>Total Ideas</h3>
+        <h2 id="totalIdeas">0</h2>
+      </div>
+      <div class="stat-card green">
+        <h3>Total Requests</h3>
+        <h2 id="totalRequests">0</h2>
+      </div>
+      <div class="stat-card amber">
+        <h3>Total Users</h3>
+        <h2 id="totalUsers">0</h2>
+      </div>
+    </div>
+
+    <!-- Post Idea -->
+    <div id="postIdeaSection" class="post-idea-section">
+      <h3>📝 Post a New Idea</h3>
+      <input type="text" id="ideaTitle" placeholder="Idea Title">
+      <textarea id="ideaDescription" placeholder="Describe your idea..." rows="4"></textarea>
+      <input type="text" id="ideaSkills" placeholder="Required Skills (comma separated)">
+      <button onclick="postIdea()">🚀 Post Idea</button>
+    </div>
+
+    <!-- Ideas -->
+    <div class="section-heading">💡 Available Ideas &amp; Projects</div>
+    <div id="ideasContainer" class="ideas-grid">
+      <div class="loading-message">Loading ideas...</div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/sidebar-loader.js"></script>
+
+<!-- ✅ FINAL CLEAN SCRIPT -->
+<script>
+async function postIdea() {
+  const title = document.getElementById("ideaTitle").value;
+  const description = document.getElementById("ideaDescription").value;
+  const skills = document.getElementById("ideaSkills").value.split(",");
+
+  if (!title || !description) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  await fetch("http://localhost:5000/api/ideas/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("token")
+    },
+    body: JSON.stringify({ title, description, requiredSkills: skills })
+  });
+
+  alert("Idea Posted Successfully ✅");
+
+  document.getElementById("ideaTitle").value = "";
+  document.getElementById("ideaDescription").value = "";
+  document.getElementById("ideaSkills").value = "";
+}
+
+async function loadDashboard() {
+  const res = await fetch("http://localhost:5000/api/dashboard/stats");
+  const data = await res.json();
+
+  console.log("FINAL DATA:", data);
+
+  document.getElementById("totalIdeas").innerText = data.totalIdeas;
+  document.getElementById("totalRequests").innerText = data.totalRequests;
+  document.getElementById("totalUsers").innerText = data.totalUsers;
+}
+
+async function loadUser() {
+  const res = await fetch("http://localhost:5000/api/user");
+  const data = await res.json();
+
+  document.getElementById("userName").innerText = "Welcome 👋";
+  document.getElementById("userEmail").innerText = data.email;
+  document.getElementById("userEnrollment").innerText = data.enrollment;
+  document.getElementById("userRole").innerText = "Student";
+}
+
+loadDashboard();
+loadUser();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>My Profile · Collabryx</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div id="sidebar-container"></div>
+
+<div class="container">
+  <div class="main">
+    <h1>My Profile</h1>
+    <p>Manage your personal information</p>
+
+    <div class="profile-card">
+
+      <div class="profile-header">
+        <img src="https://via.placeholder.com/120" alt="Profile picture">
+        <h2 id="profile-username"></h2>
+        <p id="profile-email"></p>
+      </div>
+
+      <div class="profile-section">
+
+        <div class="profile-item">
+          <strong>Enrollment</strong>
+          <span id="profile-enrollment"></span>
+          <input id="edit-enrollment">
+        </div>
+
+        <div class="profile-item">
+          <strong>Name</strong>
+          <span id="profile-name"></span>
+          <input id="edit-name">
+        </div>
+
+        <div class="profile-item">
+          <strong>Role</strong>
+          <span id="profile-role"></span>
+        </div>
+
+      </div>
+
+      <button class="edit-btn" onclick="toggleEdit()" id="editBtn">✏️ Edit Profile</button>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function loadUserData() {
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  if (!user) {
+    window.location.href = 'student-login.html';
+    return;
+  }
+
+  document.getElementById('profile-username').innerText = user.name;
+  document.getElementById('profile-email').innerText = user.email;
+  document.getElementById('profile-name').innerText = user.name;
+  document.getElementById('profile-enrollment').innerText = user.enrollment;
+  document.getElementById('profile-role').innerText = user.role;
+
+  document.getElementById('edit-name').value = user.name;
+  document.getElementById('edit-enrollment').value = user.enrollment;
+}
+
+let isEditing = false;
+
+function toggleEdit() {
+  const nameText = document.getElementById('profile-name');
+  const enrollText = document.getElementById('profile-enrollment');
+  const nameInput = document.getElementById('edit-name');
+  const enrollInput = document.getElementById('edit-enrollment');
+  const btn = document.getElementById('editBtn');
+
+  if (!isEditing) {
+    nameText.style.display = "none";
+    enrollText.style.display = "none";
+    nameInput.style.display = "inline";
+    enrollInput.style.display = "inline";
+    btn.innerText = "💾 Save Changes";
+    isEditing = true;
+  } else {
+    const user = JSON.parse(localStorage.getItem('user'));
+    user.name = nameInput.value;
+    user.enrollment = enrollInput.value;
+    localStorage.setItem('user', JSON.stringify(user));
+
+    nameText.innerText = user.name;
+    enrollText.innerText = user.enrollment;
+    nameText.style.display = "inline";
+    enrollText.style.display = "inline";
+    nameInput.style.display = "none";
+    enrollInput.style.display = "none";
+    btn.innerText = "✏️ Edit Profile";
+    isEditing = false;
+
+    alert("Profile Updated ✅");
+  }
+}
+
+window.onload = loadUserData;
+</script>
+
+<script src="../js/sidebar-loader.js"></script>
+</body>
+</html>

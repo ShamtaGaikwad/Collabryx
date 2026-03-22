@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Collabryx · Student Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .login-brand {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .login-brand .logo-text {
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a78bfa, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .login-brand p { color: #94a3b8; font-size: 13px; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 13px;
+      margin-bottom: 20px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #a78bfa; }
+  </style>
+</head>
+<body>
+  <div class="login-page">
+    <div class="form-box">
+
+      <div class="login-brand">
+        <span class="logo-text">⚡ Collabryx</span>
+        <p>Student Portal</p>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="loginForm">
+        <h2>🎓 Student Login</h2>
+
+        <form autocomplete="off">
+          <div class="form-container">
+            <input type="email" id="loginEmail" placeholder="Email Address" required>
+
+            <div class="password-box">
+              <input type="password" id="loginPassword" placeholder="Password" required>
+              <span class="toggle-eye" onclick="togglePassword('loginPassword')">👁️</span>
+            </div>
+
+            <button type="button" onclick="login()">Login →</button>
+          </div>
+        </form>
+
+        <div class="form-toggle">
+          Don't have an account? <a onclick="toggleForms()">Register</a>
+        </div>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="registerForm">
+        <h2>📝 Student Register</h2>
+
+        <form autocomplete="off">
+          <div class="form-container">
+            <input type="text" id="registerName" placeholder="Full Name" required>
+            <input type="email" id="registerEmail" placeholder="Email Address" required>
+            <input type="text" id="registerEnrollment" placeholder="Enrollment Number" required>
+
+            <div style="position: relative;">
+              <input type="password" id="registerPassword" placeholder="Password" required>
+              <span id="togglePassword" style="cursor:pointer; position:absolute; right:14px; top:50%; transform:translateY(-50%); opacity:0.6;">👁️</span>
+            </div>
+
+            <label>I am a:</label>
+            <select id="registerRole" required>
+              <option value="">-- Select Role --</option>
+              <option value="developer">Developer</option>
+              <option value="ideaProvider">Idea Provider</option>
+            </select>
+
+            <button type="button" onclick="register()">Create Account →</button>
+          </div>
+        </form>
+
+        <div class="form-toggle">
+          Already have an account? <a onclick="toggleForms()">Login</a>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:20px;">
+        <a href="./login-role.html" class="back-link">← Back to role selection</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="../js/script.js"></script>
+</body>
+</html>

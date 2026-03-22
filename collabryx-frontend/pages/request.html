@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Project Requests · Collabryx</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div id="sidebar-container"></div>
+
+<div class="container">
+  <div class="main">
+    <h1>Project Requests</h1>
+    <p>Manage applications for your projects</p>
+
+    <div id="requestsContainer"></div>
+  </div>
+</div>
+
+<script>
+async function loadRequests() {
+  try {
+    const res = await fetch("http://localhost:5000/api/request/received", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token")
+      }
+    });
+
+    const data = await res.json();
+    const container = document.getElementById("requestsContainer");
+
+    container.innerHTML = "";
+
+    if (data.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <span class="empty-state-icon">📩</span>
+          <p>No requests yet</p>
+        </div>
+      `;
+      return;
+    }
+
+    data.forEach(r => {
+      container.innerHTML += `
+        <div class="request-card">
+          <h3>${r.ideaId.title}</h3>
+          <p><strong>Applicant:</strong> ${r.userId.name}</p>
+          <p><strong>Status:</strong> ${r.status}</p>
+          <div class="btn-group">
+            <button class="accept-btn" onclick="updateRequest('${r._id}', 'accepted')">✅ Accept</button>
+            <button class="reject-btn" onclick="updateRequest('${r._id}', 'rejected')">✕ Reject</button>
+          </div>
+        </div>
+      `;
+    });
+
+  } catch (err) {
+    console.log("Error:", err);
+  }
+}
+
+async function updateRequest(id, status) {
+  try {
+    await fetch(`http://localhost:5000/api/request/update/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token")
+      },
+      body: JSON.stringify({ status })
+    });
+
+    alert("Updated ✅");
+    loadRequests();
+
+  } catch (err) {
+    console.log("Error:", err);
+  }
+}
+
+loadRequests();
+</script>
+
+<script src="../js/sidebar-loader.js"></script>
+</body>
+</html>

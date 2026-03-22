@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Collabryx · Choose Role</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .landing-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(124,58,237,0.35);
+      color: #c4b5fd;
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 28px;
+    }
+
+    .landing h1 span {
+      background: linear-gradient(135deg, #a78bfa, #ec4899, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .role-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 28px 36px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      text-decoration: none;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      min-width: 160px;
+      backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+    }
+
+    .role-card .role-icon { font-size: 36px; }
+
+    .role-card:hover {
+      background: rgba(124,58,237,0.2);
+      border-color: rgba(124,58,237,0.5);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(124,58,237,0.3);
+      color: white;
+    }
+
+    .role-card .role-sub {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="landing">
+    <div class="landing-badge">✨ Welcome to Collabryx</div>
+
+    <h1>COLLABRYX</h1>
+    <p>Choose your role to get started and join the collaboration platform built for students.</p>
+
+    <div class="role-buttons">
+      <a href="./student-login.html" class="role-card">
+        <span class="role-icon">🎓</span>
+        Student
+        <span class="role-sub">Developer / Idea Provider</span>
+      </a>
+      <a href="./teacher-login.html" class="role-card">
+        <span class="role-icon">🧑‍🏫</span>
+        Teacher
+        <span class="role-sub">Faculty / Mentor</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

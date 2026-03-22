@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Project Details · Collabryx</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .detail-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 760px;
+      backdrop-filter: blur(12px);
+      margin-bottom: 24px;
+    }
+
+    .detail-card h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    .detail-card p {
+      color: var(--muted);
+      font-size: 15px;
+      margin: 6px 0;
+    }
+
+    .team-section { margin-top: 24px; }
+
+    .team-section h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 14px;
+    }
+
+    #team-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0;
+    }
+
+    #team-list li {
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.25);
+      color: #c4b5fd;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <main class="main">
+
+      <div class="detail-card">
+        <h1 id="project-title">Project Title</h1>
+        <p id="project-teacher">Teacher: </p>
+        <p id="project-details">Details: </p>
+
+        <div class="team-section">
+          <h2>Team Members</h2>
+          <ul id="team-list"></ul>
+        </div>
+
+        <div class="project-actions" style="margin-top: 28px;">
+          <button id="like-btn">👍 <span id="like-count">0</span></button>
+          <button id="dislike-btn">👎 <span id="dislike-count">0</span></button>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <div class="comment-section">
+          <h3>Add a Comment</h3>
+          <input id="comment-input" type="text" placeholder="Write your comment here...">
+          <button id="comment-btn">💬 Comment</button>
+          <div id="comments-list"></div>
+        </div>
+      </div>
+
+      <button id="request-join-btn">🤝 Request to Join</button>
+
+    </main>
+  </div>
+
+  <script>
+    const projects = {
+      p1: {
+        title: "Smart Attendance System",
+        teacher: "Dr. Aisha Khan",
+        details: "Biometric + face recognition attendance with analytics dashboard.",
+        team: ["Alice Johnson", "Bob Smith", "Charlie Brown", "Diana Prince", "Eve Wilson", "Frank Miller"]
+      },
+      p2: {
+        title: "Campus Collaboration Portal",
+        teacher: "Prof. Rohan Patel",
+        details: "Team matching + project discovery + peer feedback.",
+        team: ["Grace Lee", "Henry Davis", "Ivy Chen", "Jack Taylor", "Kate Moore", "Liam Garcia", "Mia Rodriguez", "Noah Anderson"]
+      }
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    if (projects[id]) {
+      const project = projects[id];
+      document.getElementById('project-title').textContent = project.title;
+      document.getElementById('project-teacher').textContent = `Teacher: ${project.teacher}`;
+      document.getElementById('project-details').textContent = `Details: ${project.details}`;
+
+      const teamList = document.getElementById('team-list');
+      project.team.forEach(member => {
+        const li = document.createElement('li');
+        li.textContent = member;
+        teamList.appendChild(li);
+      });
+    }
+
+    let likeCount = 0;
+    let dislikeCount = 0;
+    const comments = [];
+
+    document.getElementById('like-btn').addEventListener('click', () => {
+      likeCount++;
+      document.getElementById('like-count').textContent = likeCount;
+    });
+
+    document.getElementById('dislike-btn').addEventListener('click', () => {
+      dislikeCount++;
+      document.getElementById('dislike-count').textContent = dislikeCount;
+    });
+
+    document.getElementById('comment-btn').addEventListener('click', () => {
+      const input = document.getElementById('comment-input');
+      const val = input.value.trim();
+      if (!val) return;
+      comments.push(val);
+      const commentDiv = document.createElement('div');
+      commentDiv.style.marginBottom = '10px';
+      commentDiv.style.padding = '12px 16px';
+      commentDiv.style.background = 'rgba(255,255,255,0.04)';
+      commentDiv.style.border = '1px solid rgba(255,255,255,0.08)';
+      commentDiv.style.borderRadius = '10px';
+      commentDiv.style.color = '#e2e8f0';
+      commentDiv.style.fontSize = '14px';
+      commentDiv.textContent = `💬 ${val}`;
+      document.getElementById('comments-list').appendChild(commentDiv);
+      input.value = '';
+    });
+
+    document.getElementById('request-join-btn').addEventListener('click', () => {
+      alert('Request to join sent successfully!');
+    });
+  </script>
+
+  <script src="../js/sidebar-loader.js"></script>
+</body>
+</html>

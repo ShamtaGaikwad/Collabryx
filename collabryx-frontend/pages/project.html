@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>My Projects · Collabryx</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div id="sidebar-container"></div>
+
+<div class="container">
+  <div class="main">
+    <h1>My Projects</h1>
+    <p>View and manage your active projects</p>
+
+    <div class="projects-grid" id="projectsContainer"></div>
+  </div>
+</div>
+
+<script>
+async function loadMyProjects() {
+    try {
+        const res = await fetch("http://localhost:5000/api/ideas");
+        const ideas = await res.json();
+
+        const container = document.getElementById("projectsContainer");
+        container.innerHTML = "";
+
+        const token = localStorage.getItem("token");
+        const userId = JSON.parse(atob(token.split('.')[1])).id;
+
+        const myProjects = ideas.filter(
+            idea => idea.createdBy && idea.createdBy._id === userId
+        );
+
+        if (myProjects.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <span class="empty-state-icon">📂</span>
+                    <p>No projects yet</p>
+                </div>
+            `;
+            return;
+        }
+
+        myProjects.forEach(project => {
+            container.innerHTML += `
+                <div class="project-card">
+                    <h3>${project.title}</h3>
+                    <span class="project-status active">${project.status}</span>
+                    <p class="project-description">${project.description}</p>
+                </div>
+            `;
+        });
+
+    } catch (error) {
+        console.log("Error:", error);
+    }
+}
+
+loadMyProjects();
+</script>
+
+<script src="../js/sidebar-loader.js"></script>
+</body>
+</html>
