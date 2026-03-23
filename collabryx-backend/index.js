@@ -13,7 +13,7 @@ const dashboardRoutes = require("./src/routes/Dashboardpage");
 const app = express();
 
 // Middleware
-app.use(cors({ origin: "https://finalye.netlify.app", credentials: true }));
+app.use(cors({ origin: "*", credentials: false }));
 app.use(express.json());
 
 // Connect DB
