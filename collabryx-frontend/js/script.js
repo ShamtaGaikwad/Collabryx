@@ -116,26 +116,9 @@ async function login() {
         const data = await response.json();
 
         if (response.ok && data.token) {
-
-            // ✅ Save token
             localStorage.setItem("token", data.token);
-
-            // ✅ Fetch user data
-            const userResponse = await fetch(`${API_URL}/api/auth/me`, {
-                headers: {
-                    "Authorization": `Bearer ${data.token}`
-                }
-            });
-
-            const userData = await userResponse.json();
-
-            // ✅ Save user data
-            localStorage.setItem("user", JSON.stringify(userData));
-
             alert("Login Successful ✅");
-
             window.location.href = "Dashboardpage.html";
-
         } else {
             alert(data.message || "Login Failed ❌");
         }
