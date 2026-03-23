@@ -9,7 +9,7 @@ const connectDB = require("./src/config/db");
 const authRoutes = require("./src/routes/auth");
 const ideaRoutes = require("./src/routes/ideas");
 const requestRoutes = require("./src/routes/request");
-const dashboardRoutes = require("./src/routes/dashboardpage");
+const dashboardRoutes = require("./src/routes/Dashboardpage");
 const app = express();
 
 // Middleware
