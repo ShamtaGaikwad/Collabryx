@@ -13,7 +13,7 @@ const dashboardRoutes = require("./src/routes/Dashboardpage");
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: "https://finalye.netlify.app", credentials: true }));
 app.use(express.json());
 
 // Connect DB
@@ -43,9 +43,3 @@ app.get("/api/faculty", async (req, res) => {
 app.listen(5000, () => {
 console.log("Server running on port 5000");
 });
-
-app.use("/api/dashboard", (req, res, next) => {
-  console.log("🔥 DASHBOARD ROUTE HIT");
-  next();
-});
-app.use("/api/dashboard", dashboardRoutes);
