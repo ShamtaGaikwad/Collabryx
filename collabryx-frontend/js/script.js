@@ -141,7 +141,7 @@ async function login() {
         }
 
     } catch (error) {
-        alert("Server error ❌");
+        alert("Server error ❌ " + error.message);
     }
 }
 
