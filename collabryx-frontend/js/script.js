@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://collabryx.onrender.com";
 
 // ====== STORE CURRENT USER DATA ======
 let currentUser = null;
