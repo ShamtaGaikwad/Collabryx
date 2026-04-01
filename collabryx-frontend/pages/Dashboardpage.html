@@ -116,7 +116,7 @@ async function postIdea() {
     return;
   }
 
-  await fetch("http://localhost:5000/api/ideas/create", {
+  await fetch("https://collabryx.onrender.com/api/ideas/create", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -133,7 +133,7 @@ async function postIdea() {
 }
 
 async function loadDashboard() {
-  const res = await fetch("http://localhost:5000/api/dashboard/stats");
+  const res = await fetch("https://collabryx.onrender.com/api/dashboard/stats");
   const data = await res.json();
 
   console.log("FINAL DATA:", data);
@@ -144,7 +144,7 @@ async function loadDashboard() {
 }
 
 async function loadUser() {
-  const res = await fetch("http://localhost:5000/api/user");
+  const res = await fetch("https://collabryx.onrender.com/api/user");
   const data = await res.json();
 
   document.getElementById("userName").innerText = "Welcome 👋";

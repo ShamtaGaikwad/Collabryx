@@ -30,7 +30,7 @@ async function loadIdeas() {
   const container = document.getElementById("ideasContainer");
 
   try {
-    const res = await fetch("http://localhost:5000/api/ideas");
+    const res = await fetch("https://collabryx.onrender.com/api/ideas");
     const ideas = await res.json();
 
     container.innerHTML = "";
@@ -79,7 +79,7 @@ async function loadIdeas() {
 
 async function applyProject(ideaId) {
   try {
-    const res = await fetch(`http://localhost:5000/api/request/apply/${ideaId}`, {
+    const res = await fetch(`https://collabryx.onrender.com/api/request/apply/${ideaId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

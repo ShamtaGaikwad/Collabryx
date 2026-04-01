@@ -150,7 +150,7 @@ async function loadFaculty() {
   try {
     console.log("Fetching faculty...");
 
-    const res = await fetch("http://localhost:5000/api/faculty");
+    const res = await fetch("https://collabryx.onrender.com/api/faculty");
     const data = await res.json();
 
     console.log("Data received:", data);
