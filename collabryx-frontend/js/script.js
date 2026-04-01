@@ -113,7 +113,14 @@ async function login() {
             body: JSON.stringify({ email, password })
         });
 
-        const data = await response.json();
+        const text = await response.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch {
+            alert("Backend is waking up, please wait 30 seconds and try again ⏳");
+            return;
+        }
 
         if (response.ok && data.token) {
             localStorage.setItem("token", data.token);
