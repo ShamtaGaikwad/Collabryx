@@ -101,4 +101,22 @@ router.put("/update-skills", authMiddleware, async (req, res) => {
   }
 });
 
+// ====== APPLY TO FACULTY ======
+router.post("/apply-faculty", authMiddleware, async (req, res) => {
+  try {
+    const { facultyId } = req.body;
+    const faculty = await User.findById(facultyId);
+    if (!faculty || faculty.role !== "faculty")
+      return res.status(404).json({ message: "Faculty not found" });
+    const student = await User.findById(req.user.id).select("name email");
+    // Store application on faculty's pendingStudents array (add field if needed)
+    await User.findByIdAndUpdate(facultyId, {
+      $addToSet: { pendingStudents: req.user.id }
+    });
+    res.json({ message: "Application sent to " + faculty.name });
+  } catch (error) {
+    res.status(500).json({ message: "Error applying to faculty" });
+  }
+});
+
 module.exports = router;

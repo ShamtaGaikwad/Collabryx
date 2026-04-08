@@ -13,7 +13,8 @@ const UserSchema = new mongoose.Schema({
     type: String,
     enum: ["ideaProvider", "developer", "faculty"]
   },
-  skills: [String]
+  skills: [String],
+  pendingStudents: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
 });
 
 module.exports = mongoose.model("User", UserSchema);
