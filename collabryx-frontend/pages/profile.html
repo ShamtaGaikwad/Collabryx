@@ -42,6 +42,13 @@
           <span id="profile-role"></span>
         </div>
 
+        <div class="profile-item">
+          <strong>My Skills</strong>
+          <div id="profile-skills" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;"></div>
+          <input id="edit-skills" placeholder="e.g. React, Node.js, Python" style="display:none; width:100%; margin-top:6px;">
+          <small style="color:#64748b; display:none;" id="skills-hint">Comma separated. These are used to suggest matching projects.</small>
+        </div>
+
       </div>
 
       <button class="edit-btn" onclick="toggleEdit()" id="editBtn">✏️ Edit Profile</button>
@@ -67,6 +74,13 @@ function loadUserData() {
 
   document.getElementById('edit-name').value = user.name;
   document.getElementById('edit-enrollment').value = user.enrollment;
+
+  const skills = user.skills || [];
+  const skillsContainer = document.getElementById('profile-skills');
+  skillsContainer.innerHTML = skills.length
+    ? skills.map(s => `<span class="skill-badge">${s}</span>`).join("")
+    : '<span style="color:#64748b; font-size:13px;">No skills added yet</span>';
+  document.getElementById('edit-skills').value = skills.join(", ");
 }
 
 let isEditing = false;
@@ -83,13 +97,28 @@ function toggleEdit() {
     enrollText.style.display = "none";
     nameInput.style.display = "inline";
     enrollInput.style.display = "inline";
+    document.getElementById('edit-skills').style.display = "inline";
+    document.getElementById('skills-hint').style.display = "block";
+    document.getElementById('profile-skills').style.display = "none";
     btn.innerText = "💾 Save Changes";
     isEditing = true;
   } else {
     const user = JSON.parse(localStorage.getItem('user'));
     user.name = nameInput.value;
     user.enrollment = enrollInput.value;
+    user.skills = document.getElementById('edit-skills').value
+      .split(",").map(s => s.trim()).filter(Boolean);
     localStorage.setItem('user', JSON.stringify(user));
+
+    // Save skills to backend
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetch("https://collabryx.onrender.com/api/auth/update-skills", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify({ skills: user.skills })
+      }).catch(err => console.log("Skills save error:", err));
+    }
 
     nameText.innerText = user.name;
     enrollText.innerText = user.enrollment;
@@ -97,6 +126,12 @@ function toggleEdit() {
     enrollText.style.display = "inline";
     nameInput.style.display = "none";
     enrollInput.style.display = "none";
+    document.getElementById('edit-skills').style.display = "none";
+    document.getElementById('skills-hint').style.display = "none";
+    document.getElementById('profile-skills').style.display = "flex";
+    document.getElementById('profile-skills').innerHTML = user.skills.length
+      ? user.skills.map(s => `<span class="skill-badge">${s}</span>`).join("")
+      : '<span style="color:#64748b; font-size:13px;">No skills added yet</span>';
     btn.innerText = "✏️ Edit Profile";
     isEditing = false;
 
