@@ -8,6 +8,11 @@ const IdeaSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   },
+  assignedFaculty: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null
+  },
   status: {
     type: String,
     default: "open"
