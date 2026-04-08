@@ -6,224 +6,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/style.css">
   <style>
-    .faculty-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 24px;
-      margin-top: 24px;
-    }
-
-    .faculty-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 28px 24px 24px;
-      backdrop-filter: blur(12px);
-      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .faculty-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(124,58,237,0.45);
-      box-shadow: 0 20px 50px rgba(124,58,237,0.15);
-    }
-
-    /* Avatar circle with gradient ring */
-    .faculty-avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #7c3aed, #ec4899);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-      margin-bottom: 16px;
-      box-shadow: 0 0 0 4px rgba(124,58,237,0.2), 0 8px 24px rgba(124,58,237,0.3);
-      flex-shrink: 0;
-    }
-
-    .faculty-name {
-      font-size: 17px;
-      font-weight: 700;
-      color: white;
-      margin-bottom: 4px;
-    }
-
-    .faculty-role-badge {
-      display: inline-block;
-      background: rgba(124,58,237,0.15);
-      border: 1px solid rgba(124,58,237,0.3);
-      color: #c4b5fd;
-      padding: 4px 12px;
-      border-radius: 100px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-
-    .faculty-desc {
-      color: #94a3b8;
-      font-size: 13px;
-      line-height: 1.6;
-      margin-bottom: 14px;
-      flex-grow: 1;
-    }
-
-    .faculty-expertise {
-      display: inline-block;
-      background: rgba(99,102,241,0.15);
-      border: 1px solid rgba(99,102,241,0.3);
-      color: #a5b4fc;
-      padding: 5px 14px;
-      border-radius: 100px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 14px;
-    }
-
-    .faculty-email {
-      font-size: 12px;
-      color: #64748b;
-      margin-bottom: 18px;
-      word-break: break-all;
-    }
-
-    .faculty-btn {
-      width: 100%;
-      padding: 11px;
-      background: linear-gradient(135deg, #7c3aed, #6366f1);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 15px rgba(124,58,237,0.3);
-      letter-spacing: 0.3px;
-    }
-
-    .faculty-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(124,58,237,0.5);
-    }
-
-    /* divider line */
-    .faculty-divider {
-      width: 40px;
-      height: 2px;
-      background: linear-gradient(90deg, #7c3aed, #ec4899);
-      border-radius: 2px;
-      margin: 0 auto 14px;
-    }
+    .faculty-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:24px; margin-top:24px; }
+    .faculty-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:28px 24px 24px; display:flex; flex-direction:column; align-items:center; text-align:center; transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s; }
+    .faculty-card:hover { transform:translateY(-6px); border-color:rgba(124,58,237,0.45); box-shadow:0 20px 50px rgba(124,58,237,0.15); }
+    .faculty-avatar { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#7c3aed,#ec4899); display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:800; color:white; margin-bottom:16px; box-shadow:0 0 0 4px rgba(124,58,237,0.2),0 8px 24px rgba(124,58,237,0.3); }
+    .faculty-name { font-size:17px; font-weight:700; color:white; margin-bottom:4px; }
+    .faculty-role-badge { background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.3); color:#c4b5fd; padding:4px 12px; border-radius:100px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:14px; }
+    .faculty-divider { width:40px; height:2px; background:linear-gradient(90deg,#7c3aed,#ec4899); border-radius:2px; margin:0 auto 14px; }
+    .faculty-email { font-size:12px; color:#64748b; margin-bottom:18px; word-break:break-all; }
+    .faculty-btn { width:100%; padding:11px; background:linear-gradient(135deg,#7c3aed,#6366f1); color:white; border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; box-shadow:0 4px 15px rgba(124,58,237,0.3); margin-bottom:8px; }
+    .faculty-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(124,58,237,0.5); }
+    .apply-faculty-btn { width:100%; padding:11px; background:transparent; color:#a78bfa; border:1px solid rgba(167,139,250,0.4); border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+    .apply-faculty-btn:hover { background:rgba(167,139,250,0.1); }
   </style>
 </head>
 <body>
-
 <div id="sidebar-container"></div>
-
 <div class="container">
   <div class="main">
     <h1>Faculty Profiles</h1>
-    <p>Browse the teaching staff and their expertise</p>
-
+    <p>Browse the teaching staff and apply for mentorship</p>
     <div id="facultyContainer" class="faculty-grid"></div>
   </div>
 </div>
-
 <script>
-console.log("Script running...");
-
-// Avatar initials helper
 function getInitials(name) {
-  return name ? name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) : '👤';
+  return name ? name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2) : '?';
 }
 
 async function loadFaculty() {
   try {
-    console.log("Fetching faculty...");
-
     const res = await fetch("https://collabryx.onrender.com/api/faculty");
     const data = await res.json();
-
-    console.log("Data received:", data);
-
     const container = document.getElementById("facultyContainer");
-
-    if (!container) {
-      console.log("Container not found ❌");
-      return;
-    }
-
     container.innerHTML = "";
-
     data.forEach(faculty => {
-      container.innerHTML += `
-        <div class="faculty-card">
-          <div class="faculty-avatar">${getInitials(faculty.name)}</div>
-          <div class="faculty-name">${faculty.name}</div>
-          <div class="faculty-role-badge">Faculty Member</div>
-          <div class="faculty-divider"></div>
-          <p class="faculty-desc">${faculty.description || "No description available"}</p>
-          <span class="faculty-expertise">🎓 ${faculty.expertise || "General"}</span>
-          <p class="faculty-email">✉️ ${faculty.email}</p>
-      <button class="faculty-btn" onclick="assignFaculty('${faculty._id}', '${faculty.name}')">📩 Assign as Mentor</button>
-        </div>
-      `;
+      const card = document.createElement("div");
+      card.className = "faculty-card";
+      card.innerHTML =
+        '<div class="faculty-avatar">' + getInitials(faculty.name) + '</div>' +
+        '<div class="faculty-name">' + faculty.name + '</div>' +
+        '<div class="faculty-role-badge">Faculty Member</div>' +
+        '<div class="faculty-divider"></div>' +
+        '<p class="faculty-email">✉️ ' + faculty.email + '</p>' +
+        '<button class="faculty-btn" onclick="assignFaculty(\'' + faculty._id + '\',\'' + faculty.name + '\')">📌 Assign as Mentor</button>' +
+        '<button class="apply-faculty-btn" onclick="applyToFaculty(\'' + faculty._id + '\',\'' + faculty.name + '\')">✋ Apply to this Faculty</button>';
+      container.appendChild(card);
     });
-
   } catch (err) {
     console.error("Error:", err);
   }
 }
 
-loadFaculty();
-
 async function assignFaculty(facultyId, facultyName) {
   const token = localStorage.getItem("token");
   if (!token) { alert("Please login first"); return; }
-
-  // Get user's ideas to pick which one to assign
   const res = await fetch("https://collabryx.onrender.com/api/ideas/my", {
     headers: { "Authorization": "Bearer " + token }
   });
   const ideas = await res.json();
-
-  if (!ideas.length) {
-    alert("You have no ideas to assign a faculty to. Post an idea first.");
-    return;
-  }
-
-  const options = ideas.map((idea, i) => `${i + 1}. ${idea.title}`).join("\n");
-  const choice = prompt(`Choose your idea to assign ${facultyName} as mentor:\n\n${options}\n\nEnter number:`);
+  if (!ideas.length) { alert("You have no ideas. Post an idea first."); return; }
+  const options = ideas.map((idea, i) => (i+1) + ". " + idea.title).join("\n");
+  const choice = prompt("Choose your idea to assign " + facultyName + " as mentor:\n\n" + options + "\n\nEnter number:");
   const idx = parseInt(choice) - 1;
-
-  if (isNaN(idx) || idx < 0 || idx >= ideas.length) {
-    alert("Invalid choice");
-    return;
-  }
-
-  const ideaId = ideas[idx]._id;
-  const assignRes = await fetch(`https://collabryx.onrender.com/api/ideas/assign-faculty/${ideaId}`, {
+  if (isNaN(idx) || idx < 0 || idx >= ideas.length) { alert("Invalid choice"); return; }
+  const assignRes = await fetch("https://collabryx.onrender.com/api/ideas/assign-faculty/" + ideas[idx]._id, {
     method: "PUT",
     headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify({ facultyId })
   });
-
   const data = await assignRes.json();
-  alert(assignRes.ok ? `✅ ${facultyName} assigned as mentor for "${ideas[idx].title}"` : data.message);
+  alert(assignRes.ok ? "✅ " + facultyName + " assigned as mentor for \"" + ideas[idx].title + "\"" : data.message);
 }
-</script>
 
+async function applyToFaculty(facultyId, facultyName) {
+  const token = localStorage.getItem("token");
+  if (!token) { alert("Please login first"); return; }
+  const res = await fetch("https://collabryx.onrender.com/api/auth/apply-faculty", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+    body: JSON.stringify({ facultyId })
+  });
+  const text = await res.text();
+  let data;
+  try { data = JSON.parse(text); } catch { alert("Server error"); return; }
+  alert(res.ok ? "✅ Application sent to " + facultyName : (data.message || "Failed"));
+}
+
+loadFaculty();
+</script>
 <script src="../js/script.js"></script>
 <script src="../js/sidebar-loader.js"></script>
-
 </body>
 </html>
