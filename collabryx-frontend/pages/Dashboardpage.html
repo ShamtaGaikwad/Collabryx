@@ -99,6 +99,14 @@
       <div class="loading-message">Loading ideas...</div>
     </div>
 
+    <!-- My Team -->
+    <div class="section-heading" id="myTeamHeading" style="display:none;">👥 My Team</div>
+    <div id="myTeamContainer" style="display:none; margin-bottom:32px;"></div>
+
+    <!-- Faculty Monitor (only for faculty role) -->
+    <div class="section-heading" id="facultyMonitorHeading" style="display:none;">🎓 Teams You're Mentoring</div>
+    <div id="facultyMonitorContainer" style="display:none; margin-bottom:32px;"></div>
+
   </div>
 </div>
 
@@ -155,6 +163,85 @@ async function loadUser() {
 
 loadDashboard();
 loadUser();
+loadMyTeam();
+
+async function loadMyTeam() {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  try {
+    const res = await fetch("https://collabryx.onrender.com/api/ideas/my-team", {
+      headers: { "Authorization": "Bearer " + token }
+    });
+    const teams = await res.json();
+    if (!teams.length) return;
+
+    // Check role for faculty monitor
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const isFaculty = payload.role === "faculty";
+
+    if (isFaculty) {
+      loadFacultyTeams(token);
+      return;
+    }
+
+    document.getElementById("myTeamHeading").style.display = "flex";
+    document.getElementById("myTeamContainer").style.display = "block";
+    const container = document.getElementById("myTeamContainer");
+
+    container.innerHTML = teams.map(({ idea, members }) => `
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:20px; margin-bottom:16px;">
+        <h3 style="color:white; margin-bottom:6px;">${idea.title}</h3>
+        <p style="color:#94a3b8; font-size:13px; margin-bottom:12px;">${idea.description || ""}</p>
+        ${idea.assignedFaculty ? `<p style="font-size:13px; color:#a78bfa; margin-bottom:10px;">🎓 Mentor: ${idea.assignedFaculty.name}</p>` : '<p style="font-size:13px; color:#64748b; margin-bottom:10px;">🎓 No mentor assigned yet</p>'}
+        <div style="font-size:13px; color:#94a3b8; margin-bottom:8px;">Team Members (${members.length}):</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <span style="background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.3); color:#a5b4fc; padding:4px 12px; border-radius:100px; font-size:12px;">👑 ${idea.createdBy?.name || "Owner"} (Owner)</span>
+          ${members.map(m => `<span style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#cbd5e1; padding:4px 12px; border-radius:100px; font-size:12px;">👤 ${m.name}</span>`).join("")}
+        </div>
+      </div>
+    `).join("");
+  } catch (err) {
+    console.log("Team load error:", err);
+  }
+}
+
+async function loadFacultyTeams(token) {
+  try {
+    const res = await fetch("https://collabryx.onrender.com/api/ideas/faculty-teams", {
+      headers: { "Authorization": "Bearer " + token }
+    });
+    const teams = await res.json();
+
+    document.getElementById("facultyMonitorHeading").style.display = "flex";
+    document.getElementById("facultyMonitorContainer").style.display = "block";
+    const container = document.getElementById("facultyMonitorContainer");
+
+    if (!teams.length) {
+      container.innerHTML = `<p style="color:#64748b;">No teams assigned to you yet.</p>`;
+      return;
+    }
+
+    container.innerHTML = teams.map(({ idea, members }) => `
+      <div style="background:rgba(124,58,237,0.06); border:1px solid rgba(124,58,237,0.2); border-radius:16px; padding:20px; margin-bottom:16px;">
+        <h3 style="color:white; margin-bottom:4px;">${idea.title}</h3>
+        <p style="color:#94a3b8; font-size:13px; margin-bottom:10px;">${idea.description || ""}</p>
+        <p style="font-size:13px; color:#a78bfa; margin-bottom:12px;">👑 Lead: ${idea.createdBy?.name || "-"}</p>
+        <div style="font-size:13px; color:#94a3b8; margin-bottom:8px;">Team Members (${members.length}):</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          ${members.length ? members.map(m => `
+            <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:8px 14px; font-size:12px;">
+              <div style="color:white; font-weight:600;">${m.name}</div>
+              <div style="color:#64748b;">${m.email}</div>
+              ${(m.skills||[]).length ? `<div style="color:#a78bfa; margin-top:4px;">${m.skills.join(", ")}</div>` : ""}
+            </div>`).join("") : '<span style="color:#64748b; font-size:13px;">No members yet</span>'}
+        </div>
+      </div>
+    `).join("");
+  } catch (err) {
+    console.log("Faculty teams error:", err);
+  }
+}
 </script>
 
 </body>

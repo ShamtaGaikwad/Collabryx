@@ -174,7 +174,7 @@ async function loadFaculty() {
           <p class="faculty-desc">${faculty.description || "No description available"}</p>
           <span class="faculty-expertise">🎓 ${faculty.expertise || "General"}</span>
           <p class="faculty-email">✉️ ${faculty.email}</p>
-          <button class="faculty-btn">📩 Request Faculty</button>
+      <button class="faculty-btn" onclick="assignFaculty('${faculty._id}', '${faculty.name}')">📩 Assign as Mentor</button>
         </div>
       `;
     });
@@ -185,6 +185,41 @@ async function loadFaculty() {
 }
 
 loadFaculty();
+
+async function assignFaculty(facultyId, facultyName) {
+  const token = localStorage.getItem("token");
+  if (!token) { alert("Please login first"); return; }
+
+  // Get user's ideas to pick which one to assign
+  const res = await fetch("https://collabryx.onrender.com/api/ideas/my", {
+    headers: { "Authorization": "Bearer " + token }
+  });
+  const ideas = await res.json();
+
+  if (!ideas.length) {
+    alert("You have no ideas to assign a faculty to. Post an idea first.");
+    return;
+  }
+
+  const options = ideas.map((idea, i) => `${i + 1}. ${idea.title}`).join("\n");
+  const choice = prompt(`Choose your idea to assign ${facultyName} as mentor:\n\n${options}\n\nEnter number:`);
+  const idx = parseInt(choice) - 1;
+
+  if (isNaN(idx) || idx < 0 || idx >= ideas.length) {
+    alert("Invalid choice");
+    return;
+  }
+
+  const ideaId = ideas[idx]._id;
+  const assignRes = await fetch(`https://collabryx.onrender.com/api/ideas/assign-faculty/${ideaId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+    body: JSON.stringify({ facultyId })
+  });
+
+  const data = await assignRes.json();
+  alert(assignRes.ok ? `✅ ${facultyName} assigned as mentor for "${ideas[idx].title}"` : data.message);
+}
 </script>
 
 <script src="../js/script.js"></script>
