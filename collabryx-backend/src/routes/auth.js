@@ -83,14 +83,21 @@ router.post("/login", async (req, res) => {
 router.get("/me", authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
-    
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: "Error fetching user profile" });
+  }
+});
+
+// ====== UPDATE SKILLS ======
+router.put("/update-skills", authMiddleware, async (req, res) => {
+  try {
+    const { skills } = req.body;
+    await User.findByIdAndUpdate(req.user.id, { skills });
+    res.json({ message: "Skills updated" });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating skills" });
   }
 });
 
